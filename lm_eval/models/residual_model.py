@@ -233,3 +233,30 @@ class ResidualModel(HFLM):
         # For now haven;t implemented a generation method for the residuals as we need to add the logits before generation ...
         raise NotImplementedError
 
+    def get_model_info(self) -> dict:
+        """
+        Method to get Hugging Face model information for experiment reproducibility.
+        """
+
+        def get_model_num_params(model) -> int:
+            if hasattr(model, "num_parameters"):
+                return model.num_parameters()
+            if hasattr(model, "parameters"):
+                return sum(p.numel() for p in model.parameters())
+            else:
+                return -1
+
+        def get_model_dtype(model) -> str:
+            if hasattr(model, "dtype"):
+                return model.dtype
+            else:
+                return ""
+
+        model_info = {
+            "model_num_parameters_teacher_frozen": get_model_num_params(self.model_frozen),
+            "model_num_parameters_student": get_model_num_params(self.model_student),
+
+            "model_dtype": get_model_dtype(self._model),
+        }
+
+        return model_info
