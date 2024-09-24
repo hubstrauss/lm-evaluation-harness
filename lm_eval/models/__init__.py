@@ -11,6 +11,7 @@ from . import (
     neuron_optimum,
     openai_completions,
     optimum_lm,
+    residual_model,
     textsynth,
     vllm_causallms,
     vllm_vlms,
